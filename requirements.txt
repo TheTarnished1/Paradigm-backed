@@ -4,3 +4,5 @@ langchain-core
 langchain-groq
 pydantic
 python-dotenv
+PyPDF2
+python-multipart
