@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
 from langchain_groq import ChatGroq
+from langchain_core.messages import SystemMessage, HumanMessage
 
 app = FastAPI()
 
@@ -21,12 +22,13 @@ synapse = ChatGroq(
 )
 
 class ChatRequest(BaseModel):
-    message: str
+    # Change: We now accept a list of messages from the frontend
+    messages: list 
 
 @app.post("/api/chat")
 async def chat_with_paradigm(req: ChatRequest):
-    # The AI is now a "Thin Server" focusing only on the prompt
-    system_prompt = f"""
+    # Define the core identity
+    system_instruction = """
     You are Paradigm, the proprietary Assistant to Pascal.
     
     STRICT RULES:
@@ -39,10 +41,15 @@ async def chat_with_paradigm(req: ChatRequest):
        - Avoid walls of text. Use headers, bold text, and clear formatting.
        - Prioritize 'Focus & Flow' in your tone.
     6. MISSION: Act as his specialized technical partner. Keep it sharp, technical, and direct.
-    
-    
-    USER PROMPT: {req.message}
     """
     
-    response = synapse.invoke(system_prompt)
+    # Construct the message history: System Prompt + whatever the frontend sent
+    full_history = [SystemMessage(content=system_instruction)]
+    
+    for msg in req.messages:
+        # Convert frontend dicts to LangChain message objects
+        if msg["role"] == "user":
+            full_history.append(HumanMessage(content=msg["content"]))
+    
+    response = synapse.invoke(full_history)
     return {"reply": response.content}
