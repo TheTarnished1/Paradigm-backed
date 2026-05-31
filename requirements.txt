@@ -7,3 +7,5 @@ sentence-transformers
 python-dotenv
 huggingface-hub
 langchain-groq
+fastapi
+uvicorn
