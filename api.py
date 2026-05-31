@@ -10,11 +10,10 @@ from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 
 app = FastAPI()
 
-# 1. ALLOW VERCEL TO TALK TO RENDER
+# 1. ALLOW ANY VERCEL LINK TO TALK TO RENDER
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://paradigm-frontend.vercel.app"], # Change this to your Vercel URL later for security
-    allow_credentials=True,
+    allow_origins=["*"], # Wildcard allows ANY Vercel preview or production link to work
     allow_methods=["*"],
     allow_headers=["*"],
 )
