@@ -33,7 +33,7 @@ memory = None
 synapse = ChatGroq(
   temperature=0.1,
     model_name="llama3-8b-8192",
-    api_key="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"  
+    api_key=os.environ.get("GROQ_API_KEY")
 )
 print("🤖 Cloud Synapse (Groq): ONLINE")
 
