@@ -13,7 +13,7 @@ app = FastAPI()
 # 1. ALLOW VERCEL TO TALK TO RENDER
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Change this to your Vercel URL later for security
+    allow_origins=["https://paradigm-frontend.vercel.app"], # Change this to your Vercel URL later for security
     allow_methods=["*"],
     allow_headers=["*"],
 )
